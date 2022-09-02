@@ -31,14 +31,6 @@ export class InstanceSingletonScopedBinding extends InstanceBinding {
 
   constructor(public readonly impl: UnknownCreator) {
     super(impl);
-
-    if (process.env.NODE_ENV !== 'production') {
-      this.clone = (): InstanceSingletonScopedBinding => {
-        const binding = new InstanceSingletonScopedBinding(this.impl);
-        binding.cache = this.cache;
-        return binding;
-      };
-    }
   }
 }
 

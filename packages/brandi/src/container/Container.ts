@@ -38,21 +38,6 @@ export class Container extends DependencyModule {
   constructor() {
     super();
 
-    if (process.env.NODE_ENV !== 'production') {
-      this.capture = (): void => {
-        this.snapshot = this.vault.copy!();
-      };
-
-      this.restore = (): void => {
-        if (this.snapshot) {
-          this.vault = this.snapshot.copy!();
-        } else {
-          console.error(
-            "Error: It looks like a trying to restore a non-captured container state. Did you forget to call 'capture()' method?",
-          );
-        }
-      };
-    }
   }
 
   /**

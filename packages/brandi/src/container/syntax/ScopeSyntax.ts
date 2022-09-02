@@ -18,14 +18,6 @@ export class ScopeSyntax {
     private readonly token: Token,
     private readonly condition?: ResolutionCondition,
   ) {
-    if (process.env.NODE_ENV !== 'production') {
-      this.warningTimeout = setTimeout(() => {
-        console.warn(
-          `Warning: did you forget to set a scope for '${this.token.__d}' token binding? ` +
-            "Call 'inTransientScope()', 'inSingletonScope()', 'inContainerScope()' or 'inResolutionScope()'.",
-        );
-      });
-    }
   }
 
   /**
@@ -77,9 +69,6 @@ export class ScopeSyntax {
       | typeof InstanceSingletonScopedBinding
       | typeof InstanceTransientScopedBinding,
   ): void {
-    if (process.env.NODE_ENV !== 'production')
-      clearTimeout(this.warningTimeout!);
-
     this.vault.set(new Ctor(this.impl), this.token, this.condition);
   }
 }

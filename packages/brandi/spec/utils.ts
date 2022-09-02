@@ -7,12 +7,7 @@ export type Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends <
   : false;
 
 export const setEnv = (value: string): (() => void) => {
-  const env = { ...process.env };
-  process.env.NODE_ENV = value;
-
-  return () => {
-    process.env = { ...env };
-  };
+  
 };
 
 export const wait = <T>(callback: () => T): Promise<T> =>

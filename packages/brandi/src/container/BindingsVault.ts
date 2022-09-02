@@ -16,20 +16,7 @@ export class BindingsVault {
   public copy?(): BindingsVault;
 
   constructor() {
-    if (process.env.NODE_ENV !== 'production') {
-      this.copy = (): BindingsVault =>
-        this.from((prev) => {
-          const next = new Map<ResolutionCondition, Binding | BindingsVault>();
-          prev.forEach((binding, key) => {
-            if (binding instanceof BindingsVault) {
-              next.set(key, binding.copy!());
-            } else {
-              next.set(key, binding.clone?.() ?? binding);
-            }
-          });
-          return next;
-        });
-    }
+    
   }
 
   public set(
@@ -62,33 +49,6 @@ export class BindingsVault {
     if (target) {
       const targetBinding = bindings.get(target);
       if (targetBinding) return targetBinding;
-    }
-
-    if (
-      process.env.NODE_ENV !== 'production' &&
-      conditions &&
-      conditions.reduce(
-        (acc, condition) => (bindings.has(condition) ? acc + 1 : acc),
-        0,
-      ) > 1
-    ) {
-      const conditionsDisplayString = conditions
-        .map((condition) =>
-          typeof condition === 'function'
-            ? condition.name
-            : `tag(${condition.description})`,
-        )
-        .join(', ');
-
-      console.warn(
-        'Warning: ' +
-          `When resolving a binding by '${token.__d}' token with [${conditionsDisplayString}] conditions, ` +
-          'more than one binding was found. ' +
-          "In this case, Brandi resolves the binding by the first tag assigned by 'tagged(target, ...tags)' function " +
-          "or, if you explicitly passed conditions through 'Container.get(token, conditions)' method, " +
-          'by the first resolved condition. ' +
-          'Try to avoid such implicit logic.',
-      );
     }
 
     if (conditions) {
